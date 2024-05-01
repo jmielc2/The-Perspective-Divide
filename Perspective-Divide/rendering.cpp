@@ -4,6 +4,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include <fstream>
+#include <SDL_image.h>
 
 extern bool gQuit;
 extern float deltaTime;
@@ -34,6 +35,7 @@ GLint projectionMatrixLocation{};
 GLuint shaderProgram{};
 
 void updateUniforms();
+void loadTextures();
 void bufferData();
 GLuint compileShaderProgram(const std::string& vertexShaderFile, const std::string& fragmnetShaderFile);
 
@@ -61,6 +63,7 @@ bool setupRenderer() {
 
 	// Load Data
 	bufferData();
+	loadTextures();
 	return true;
 }
 
@@ -132,6 +135,10 @@ void bufferData() {
 	} else {
 		std::cerr << "Couldn't find the uProjection uniform.\n";
 	}
+}
+
+void loadTextures() {
+	std::cout << "TODO: Load textures with SDL_image.\n";
 }
 
 bool readFile(const std::string& filename, std::string& contents) {

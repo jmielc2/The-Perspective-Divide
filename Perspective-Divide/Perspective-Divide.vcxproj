@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Libraries\glad\include;C:\Libraries\glm;C:\Libraries\SDL\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Libraries\SDL\SDL2\x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Libraries\SDL\SDL_image\include;C:\Libraries\glad\include;C:\Libraries\glm;C:\Libraries\SDL\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Libraries\SDL\SDL_image\x64\Debug;C:\Libraries\SDL\SDL2\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Libraries\glad\include;C:\Libraries\glm;C:\Libraries\SDL\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Libraries\SDL\SDL2\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Libraries\SDL\SDL_image\include;C:\Libraries\glad\include;C:\Libraries\glm;C:\Libraries\SDL\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Libraries\SDL\SDL_image\x64\Release;C:\Libraries\SDL\SDL2\x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -127,7 +127,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,7 +147,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
