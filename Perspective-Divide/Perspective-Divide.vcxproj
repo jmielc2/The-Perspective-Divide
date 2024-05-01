@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\frag-shader.fs" />
+    <None Include="shaders\pd-frag-shader.fs" />
     <None Include="shaders\vert-shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

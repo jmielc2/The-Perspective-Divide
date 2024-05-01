@@ -6,9 +6,6 @@
 #include <fstream>
 #include <SDL_image.h>
 
-extern bool gQuit;
-extern float deltaTime;
-
 const float square[]{
 	// vertex				// texture
 	-2.0f, -0.5f, -0.0f,	0.0f, 0.0f,
@@ -60,6 +57,7 @@ bool setupRenderer() {
 		return false;
 	}
 	glUseProgram(shaderProgram);
+	std::cout << "Shader compiled successfully!\n";
 
 	// Load Data
 	bufferData();

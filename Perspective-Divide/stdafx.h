@@ -3,6 +3,11 @@
 #ifndef STDAFX_H
 #define STDAFX_H
 
+extern bool gQuit;
+extern float deltaTime;
+extern const int gScreenWidth;
+extern const int gScreenHeight;
+
 #include <sstream>
 #include <string>
 #include <vector>

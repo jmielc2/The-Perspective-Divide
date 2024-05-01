@@ -40,5 +40,8 @@
     <None Include="shaders\vert-shader.vs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaders\pd-frag-shader.fs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
