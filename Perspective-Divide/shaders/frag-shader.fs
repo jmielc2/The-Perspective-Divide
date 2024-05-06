@@ -1,7 +1,9 @@
-#version 460
+#version 450
 
 in vec3 uv;
 
+out vec4 fragColor;
+
 void main() {
-    gl_FragColor = vec4(1, uv.x, uv.y, 1);
+    fragColor = vec4(1.0f, uv.x, uv.y, 1.0f);
 }

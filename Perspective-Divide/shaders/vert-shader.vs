@@ -1,4 +1,4 @@
-#version 460
+#version 450
 
 uniform mat4 uModel;
 uniform mat4 uProjection;
@@ -10,5 +10,5 @@ out vec3 uv;
 
 void main() {
 	gl_Position = uProjection * uModel * vec4(aVertex, 1.0);
-	uv = vec3(aTexture, gl_Position.w);
+	uv = aTexture;
 }

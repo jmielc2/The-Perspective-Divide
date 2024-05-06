@@ -12,7 +12,7 @@ extern const int gScreenHeight;
 #include <string>
 #include <vector>
 #include <iostream>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <SDL.h>
 #include <SDL_types.h>
 #include <glad/glad.h>
