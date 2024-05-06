@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "rendering.h"
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include <SDL_image.h>
 
@@ -147,9 +146,10 @@ bool readFile(const std::string& filename, std::string& contents) {
 		std::cerr << "Couldn't open '" << filename << "'" << std::endl;
 		return false;
 	}
-	contents.resize(size_t(file.tellg()));
 	file.seekg(0, file.beg);
-	file.read(contents.data(), std::streamsize(contents.capacity()));
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	contents = buffer.str();
 	return true;
 }
 
@@ -172,16 +172,16 @@ GLuint compileShader(GLenum type, const std::string& src) {
 
 GLuint compileShaderProgram(const std::string& vertexShaderFile, const std::string& fragmentShaderFile) {
 	// Compile Shaders
-	std::string shaderSrc{ };
-	if (!readFile(vertexShaderFile, shaderSrc)) {
+	std::string vertShaderSrc{ };
+	if (!readFile(vertexShaderFile, vertShaderSrc)) {
 		return 0;
 	}
-	GLuint vertexShader = compileShader(GL_VERTEX_SHADER, shaderSrc);
-	shaderSrc.clear();
-	if (!vertexShader || !readFile(fragmentShaderFile, shaderSrc)) {
+	GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertShaderSrc);
+	std::string fragShaderSrc;
+	if (!vertexShader || !readFile(fragmentShaderFile, fragShaderSrc)) {
 		return 0;
 	}
-	GLuint fragShader = compileShader(GL_FRAGMENT_SHADER, shaderSrc);
+	GLuint fragShader = compileShader(GL_FRAGMENT_SHADER, fragShaderSrc);
 	if (!fragShader) {
 		return 0;
 	}
