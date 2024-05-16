@@ -182,6 +182,7 @@ bool loadTextures(const std::string& filename, GLuint& texture) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgSource->w, imgSource->h, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, imgSource->pixels);
 	glGenerateMipmap(GL_TEXTURE_2D);
+	SDL_FreeSurface(imgSource);
 	return true;
 }
 
