@@ -108,6 +108,8 @@ void cleanUpRenderer() {
 	glDeleteBuffers(1, &vbo);
 	glDeleteVertexArrays(1, &vao);
 	glDeleteProgram(shaderProgram);
+	glDeleteProgram(pdShaderProgram);
+	glDeleteTextures(1, &checkerboard);
 }
 
 void updateUniforms(glm::mat4& modelMatrix) {
