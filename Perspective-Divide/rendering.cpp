@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "rendering.h"
+#include "strip.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
@@ -7,10 +9,10 @@
 
 const float square[]{
 	// vertex				// texture
-	-2.0f, -0.5f, -0.0f,	0.0f, 0.0f,
-	 2.0f, -0.5f, -0.0f,	1.0f, 0.0f,
-	-2.0f,  0.5f, -0.0f,	0.0f, 1.0f,
-	 2.0f,  0.5f, -0.0f,	1.0f, 1.0f
+	-2.5f, -0.5f, -0.0f,	0.0f, 0.0f,
+	 2.5f, -0.5f, -0.0f,	5.0f, 0.0f,
+	-2.5f,  0.5f, -0.0f,	0.0f, 1.0f,
+	 2.5f,  0.5f, -0.0f,	5.0f, 1.0f
 };
 
 const int indices[]{
@@ -18,22 +20,25 @@ const int indices[]{
 	0, 3, 2
 };
 
-glm::mat4 modelMatrix{ 1.0f };
+glm::mat4 modelMatrix1{ 1.0f };
+glm::mat4 modelMatrix2{ 1.0f };
 glm::mat4 projectionMatrix{ 1.0f };
 
 const float rotationSpeed{ 45.0f };
-float rotationAngle{ 0.0f };
+float rotationAngle{ 70.0f };
 GLuint vbo{};
 GLuint vao{};
 GLuint ebo{};
-GLint modelMatrixLocation{};
-GLint projectionMatrixLocation{};
+GLuint checkerboard{};
+GLuint* curProgram{ nullptr };
 GLuint shaderProgram{};
+GLuint pdShaderProgram{};
 
-void updateUniforms();
-void loadTextures();
+void updateUniforms(glm::mat4& modelMatrix);
+bool loadTextures(const std::string& filename, GLuint& texture);
 void bufferData();
 GLuint compileShaderProgram(const std::string& vertexShaderFile, const std::string& fragmnetShaderFile);
+void configureUniforms(const glm::vec3& startPos, glm::mat4& modelMatrix);
 
 void processInput() {
 	SDL_Event e{};
@@ -48,30 +53,53 @@ void processInput() {
 bool setupRenderer() {
 	// Enable GL features we need
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-	glEnable(GL_DEPTH);
+	glEnable(GL_DEPTH_TEST);
 
 	// Compile Shaders
-	shaderProgram = compileShaderProgram("shaders/vert-shader.vs", "shaders/frag-shader.fs");
+	shaderProgram = compileShaderProgram("shaders/vert-shader.glsl", "shaders/frag-shader.glsl");
 	if (!shaderProgram) {
 		return false;
 	}
 	glUseProgram(shaderProgram);
-	std::cout << "Shader compiled successfully!\n";
+	curProgram = &shaderProgram;
+	configureUniforms(glm::vec3(0.0f, 1.0f, -7.0f), modelMatrix1);
+
+	pdShaderProgram = compileShaderProgram("shaders/vert-shader.glsl", "shaders/pd-frag-shader.glsl");
+	if (!pdShaderProgram) {
+		return false;
+	}
+	glUseProgram(pdShaderProgram);
+	curProgram = &pdShaderProgram;
+	configureUniforms(glm::vec3(0.0f, -0.5f, -7.0f), modelMatrix2);
+	std::cout << "Shaders compiled successfully!\n";
 
 	// Load Data
 	bufferData();
-	loadTextures();
+	if (!loadTextures("assets/checkerboard.png", checkerboard)) {
+		return false;
+	}
 	return true;
 }
 
 void preDraw() {
-	glViewport(0, 0, gScreenWidth, gScreenHeight);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 }
 
 void draw() {
-	updateUniforms();
+	rotationAngle = deltaTime * rotationSpeed;
 	glBindVertexArray(vao);
+	glBindTexture(GL_TEXTURE_2D, checkerboard);
+	glViewport(0, 0, gScreenWidth, gScreenHeight);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	curProgram = &shaderProgram;
+	glUseProgram(shaderProgram);
+	// updateUniforms(modelMatrix1);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+	curProgram = &pdShaderProgram;
+	glUseProgram(pdShaderProgram);
+	// updateUniforms(modelMatrix2);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
@@ -82,8 +110,8 @@ void cleanUpRenderer() {
 	glDeleteProgram(shaderProgram);
 }
 
-void updateUniforms() {
-	rotationAngle = deltaTime * rotationSpeed;
+void updateUniforms(glm::mat4& modelMatrix) {
+	GLint modelMatrixLocation = glGetUniformLocation(*curProgram, "uModel");
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 }
@@ -116,16 +144,19 @@ void bufferData() {
 	} else {
 		std::cerr << "Couldn't find the aTexture attribute.\n";
 	}
+}
 
+void configureUniforms(const glm::vec3& startPos, glm::mat4& modelMatrix) {
 	// Configure Uniforms
-	modelMatrixLocation = glGetUniformLocation(shaderProgram, "uModel");
+	GLint modelMatrixLocation = glGetUniformLocation(*curProgram, "uModel");
 	if (modelMatrixLocation != -1) {
-		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
+		modelMatrix = glm::translate(glm::mat4(1.0f), startPos);
+		modelMatrix = glm::rotate(modelMatrix, glm::radians(rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	} else {
 		std::cerr << "Couldn't find the uModel uniform.\n";
 	}
-	projectionMatrixLocation = glGetUniformLocation(shaderProgram, "uProjection");
+	GLint projectionMatrixLocation = glGetUniformLocation(*curProgram, "uProjection");
 	if (projectionMatrixLocation != -1) {
 		projectionMatrix = glm::perspective(glm::radians(45.0f), float(gScreenWidth) / float(gScreenHeight), 0.1f, 10.0f);
 		glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
@@ -134,8 +165,22 @@ void bufferData() {
 	}
 }
 
-void loadTextures() {
-	std::cout << "TODO: Load textures with SDL_image.\n";
+bool loadTextures(const std::string& filename, GLuint& texture) {
+	texture = 0;
+	SDL_Surface* imgSource{ IMG_Load("assets/checkerboard.png") };
+	if (!imgSource) {
+		std::cerr << "Couldn't open '" << filename << "'" << std::endl;
+		return false;
+	}
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgSource->w, imgSource->h, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, imgSource->pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	return true;
 }
 
 bool readFile(const std::string& filename, std::string& contents) {

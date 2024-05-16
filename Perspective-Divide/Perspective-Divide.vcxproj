@@ -154,15 +154,17 @@
     <ClCompile Include="..\..\..\..\..\..\Libraries\glad\src\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rendering.cpp" />
+    <ClCompile Include="strip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="strip.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\frag-shader.fs" />
-    <None Include="shaders\pd-frag-shader.fs" />
-    <None Include="shaders\vert-shader.vs" />
+    <None Include="shaders\frag-shader.glsl" />
+    <None Include="shaders\pd-frag-shader.glsl" />
+    <None Include="shaders\vert-shader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

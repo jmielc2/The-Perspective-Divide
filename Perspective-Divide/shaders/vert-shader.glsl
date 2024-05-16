@@ -7,8 +7,10 @@ in vec3 aVertex;
 in vec2 aTexture;
 
 out vec2 uv;
+out float w;
 
 void main() {
 	gl_Position = uProjection * uModel * vec4(aVertex, 1.0);
 	uv = aTexture;
+	w = gl_Position.w;
 }

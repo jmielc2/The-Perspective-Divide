@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "rendering.h"
 
-const int gScreenHeight{ 480 };
-const int gScreenWidth{ 640 };
+const int gScreenHeight{ 960 };
+const int gScreenWidth{ 840 };
 const int fps{ 60 };
 float deltaTime{ 0.0f };
 SDL_Window* gWindow{ nullptr };

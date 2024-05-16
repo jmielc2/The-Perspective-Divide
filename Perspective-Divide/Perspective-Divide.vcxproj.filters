@@ -24,6 +24,9 @@
     <ClCompile Include="..\..\..\..\..\..\Libraries\glad\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="strip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering.h">
@@ -32,15 +35,18 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="strip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\frag-shader.fs">
+    <None Include="shaders\frag-shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shaders\vert-shader.vs">
+    <None Include="shaders\vert-shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shaders\pd-frag-shader.fs">
+    <None Include="shaders\pd-frag-shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
