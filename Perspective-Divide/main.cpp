@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "rendering.h"
 
-const int gScreenHeight{ 960 };
-const int gScreenWidth{ 840 };
+#include <cstring>
+
+const int gScreenHeight{ 700 };
+const int gScreenWidth{ 900 };
 const int fps{ 60 };
 float deltaTime{ 0.0f };
+bool useTexture{ false };
 SDL_Window* gWindow{ nullptr };
 SDL_GLContext gContext{ nullptr };
 bool gQuit{ false };
@@ -73,14 +76,19 @@ static void mainLoop() {
 	}
 }
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
+int main(int argc, char* argv[]) {
+	if (argc == 2 && std::strcmp(argv[1], "-wTexture") == 0) {
+		useTexture = true;
+	} else if ((argc == 2 && std::strcmp(argv[1], "-woTexture") != 0) || argc > 2) {
+		std::cout << "Usage: " << argv[0] << " <-wTexture | -woTexture>\n";
+		return 0;
+	}
 	if (!initializeProgram()) {
 		cleanUp();
 		return 0;
 	}
 	SDL_ShowWindow(gWindow);
 	mainLoop();
-
 	cleanUp();
 	return 0;
 }

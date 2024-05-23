@@ -2,6 +2,7 @@
 
 uniform mat4 uModel;
 uniform mat4 uProjection;
+uniform bool uPerspectiveDivide;
 
 in vec3 aVertex;
 in vec2 aTexture;
@@ -10,7 +11,10 @@ out vec2 uv;
 out float w;
 
 void main() {
-	gl_Position = uProjection * uModel * vec4(aVertex, 1.0);
+	vec4 pos = uProjection * uModel * vec4(aVertex, 1.0);
 	uv = aTexture;
-	w = gl_Position.w;
+	if (!uPerspectiveDivide) {
+		pos /= pos.w;
+	}
+	gl_Position = pos;
 }

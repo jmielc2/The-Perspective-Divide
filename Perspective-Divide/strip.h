@@ -4,28 +4,32 @@
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 #include <string>
-#include <memory>
 
 extern float rotationAngle;
 extern const float rotationSpeed;
 
 class Strip {
 private:
-	glm::mat4 modelMatrix;
 	glm::mat4 projectionMatrix;
-	std::shared_ptr<GLuint> shader;
-	std::shared_ptr<GLuint> vaoData;
-	std::shared_ptr<GLuint> texture;
+	glm::vec3 pos;
+	GLuint shader;
+	GLuint vao;
+	GLuint vbo;
+	GLuint ebo;
+	GLuint texture;
 
 	void updateUniforms();
-	bool shaderCheck();
+	bool compileShaderProgram();
+	bool bufferData();
+	bool loadTexture();
+	void configureUniforms();
 public:
 	void draw();
-	void setShader(GLuint& shader);
-	void setTexture(GLuint& texture);
-	void setPosition(const glm::vec3& pos);
+	bool initialize();
+	void setPosition(const glm::vec3& newPos);
 	
-	Strip(GLuint& vaoData);
+	Strip();
+	~Strip();
 };
 
 #endif

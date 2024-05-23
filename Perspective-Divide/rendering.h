@@ -3,6 +3,10 @@
 #ifndef RENDERING_H
 #define RENDERING_H
 
+extern const int gScreenHeight;
+extern const int gScreenWidth;
+extern float deltaTime;
+
 extern bool setupRenderer();
 
 extern void processInput();
